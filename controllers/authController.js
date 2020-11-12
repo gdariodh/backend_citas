@@ -35,7 +35,7 @@ exports.userAuth = async (req, res, next) => {
       }
     );
 
-    res.json({ token: newToken });
+    res.json({ token: newToken, msg: `Bienvenido ${user.name}` });
   } else {
     res.status(401).json({ msg: "Password incorrecto" });
     return next();
@@ -44,5 +44,8 @@ exports.userAuth = async (req, res, next) => {
 
 // TODO: extrae y retorna el objeto de usuario que proporciona el middleware "Auth" mediante req.usuario
 exports.authUser = (req, res) => {
-  res.json({ usuario: req.usuario });
+  if(req.usuario){
+    res.json({ usuario: req.usuario });
+  }
+  
 };

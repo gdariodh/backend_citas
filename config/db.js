@@ -12,7 +12,7 @@ const connectDB = async () => {
          useFindAndModify:false,
          useCreateIndex:true
      });
-     console.log("DB conectada con el servidor")   
+     console.log("DB conectada con el servidor exitosamente:)")   
     } catch (error) {
         console.log("Hubo error en al conectar con la DB", error);
         // detiene el servidor 

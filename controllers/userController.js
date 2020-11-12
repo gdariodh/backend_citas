@@ -5,9 +5,9 @@ require("dotenv").config({ path: "variables.env" });
 // TODO: Librerias
 const bcrypt = require("bcryptjs");
 const { validationResult } = require("express-validator");
-
+const jwt = require("jsonwebtoken");
 // TODO: Controllers
-exports.newUser = async (req, res) => {
+exports.newUser = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res.status(400).json({ errores: error.array() });
@@ -32,12 +32,31 @@ exports.newUser = async (req, res) => {
   try {
     // TODO: almacenamos el nuevo usuario en la DB
     await user.save();
-    res.json({ msg: "Usuario creado", usuario: user });
+
+    // Ya como el usuario esta almacenado en la DB, le asignamos un token para que inicie sesion
+    if (user) {
+      const newToken = jwt.sign(
+        {
+          nombre: user.name,
+          lastname: user.lastname,
+          id: user.id,
+        },
+        process.env.SECRET_JWT,
+        {
+          // TODO: cuando expira el token, ya termina la sesion
+          expiresIn: "9h",
+        }
+      );
+
+      res.json({ msg: "Usuario creado exitosamente", token: newToken });
+    } else {
+      res.status(401).json({ msg: "Password incorrecto" });
+      return next();
+    }
   } catch (error) {
     console.log(error);
     res
-      .json(500)
+      .status(500)
       .json({ msg: "Hubo un problema con el servidor, intentalo de nuevo" });
   }
 };
-

@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
-const citaSchema = mongoose.Schema({
+const notaSchema = mongoose.Schema({
   name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  patient: {
     type: String,
     required: true,
     trim: true,
@@ -23,10 +18,10 @@ const citaSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  date: {
+  creado: {
     type: Date,
     default: Date.now(),
   },
 });
 
-module.exports = mongoose.model("Cita", citaSchema);
+module.exports = mongoose.model("Nota", notaSchema);
